@@ -6,13 +6,20 @@ $(function() {
   var $lastname = $('#lastname');
   var $email = $('#email');
 
+  function addContact(contact) {
+    var fullName = contact.firstname + " " + contact.lastname;
+    var email = contact.email;
+    var listContact = $('<li>').text(fullName + " - " + email);
+    $contacts.prepend(listContact);
+  };
+
   $.ajax({
     type: 'GET',
     url: '/contacts',
     success: function(contacts) {
       console.log(contacts);
       $.each(contacts, function(i, contact) {
-        $contacts.append('<li>Name: '+ contact.firstname + " " + contact.lastname +', Email: '+ contact.email + '</li>');
+        addContact(contact);
       });
     },
     error: function() {
@@ -33,7 +40,7 @@ $(function() {
       url: '/contacts',
       data: contact,
       success: function(newContact) {
-        $contacts.prepend('<li>Name: '+ newContact.firstname + " " + newContact.lastname +', Email: '+ newContact.email + '</li>');
+        addContact(newContact);
       },
       error: function() {
         $errors.text('Error saving contact.');

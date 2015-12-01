@@ -5,7 +5,7 @@ end
 
 get '/contacts' do
   content_type :json
-  @contacts = Contact.all.order(created_at: :desc)
+  @contacts = Contact.all
 
   @contacts.to_json
 end
