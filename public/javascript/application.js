@@ -1,6 +1,10 @@
 $(function() {
 
   var $contacts = $('.contacts-index');
+  var $errors = $('#errors')
+  var $firstname = $('#firstname');
+  var $lastname = $('#lastname');
+  var $email = $('#email');
 
   $.ajax({
     type: 'GET',
@@ -12,8 +16,29 @@ $(function() {
       });
     },
     error: function() {
-      $contacts.text('Could not load contacts');
+      $errors.text('Could not load contacts.');
     }
+  });
+
+  $('#new-contact-submit').on('click', function() {
+
+    var contact = {
+      firstname: $firstname.val(),
+      lastname: $lastname.val(),
+      email: $email.val()
+    };
+
+    $.ajax({
+      type: 'POST',
+      url: '/contacts',
+      data: contact,
+      success: function(newContact) {
+        $contacts.prepend('<li>Name: '+ newContact.firstname + " " + newContact.lastname +', Email: '+ newContact.email + '</li>');
+      },
+      error: function() {
+        $errors.text('Error saving contact.');
+      }
+    });
   });
 
 });
