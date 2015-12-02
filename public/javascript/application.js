@@ -35,7 +35,10 @@ $(function() {
     var fullname = contact.firstname + " " + contact.lastname;
     var email = contact.email;
     var li = $('<li>').text(fullname + " - " + email);
+    var delbutton = $('<button>').addClass('delete-button').text('Delete').attr('contactid', contact.id);
     $contacts.prepend(li);
+    li.append(delbutton);
+    deleteContact();
   };
 
   function listAllContacts() {
@@ -102,5 +105,28 @@ $(function() {
       }
     });
   });
+
+  function deleteContact() {
+    $('.delete-button').on('click', function(e) {
+      if (confirm('Are you sure?')) {
+        var thiscontact = $(this);
+        var contactid = $(this).attr('contactid');
+        e.preventDefault
+        $.ajax({
+          type: 'DELETE',
+          url: '/contact/' + contactid,
+          success: function(result) {
+            thiscontact.closest('li').remove();
+            $message.text('Contact deleted.');
+          },
+          error: function() {
+            $message.text('Error with deleting contact.');
+          }
+        });
+      } else {
+        return false;
+      };
+    });
+  };
 
 });

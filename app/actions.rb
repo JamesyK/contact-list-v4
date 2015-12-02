@@ -19,7 +19,7 @@ post '/contacts' do
   if contact.save
     contact.to_json
   else
-    halt 500
+    halt(500)
   end
 end
 
@@ -29,7 +29,16 @@ post '/contacts/:id' do
   if contact
     contact.to_json
   else
-    halt 404
+    halt(404)
+  end
+end
+
+delete '/contact/:id' do
+  contact = Contact.find(params[:id])
+  if contact.destroy
+    contact.to_json
+  else
+    halt(500)
   end
 end
 
