@@ -5,6 +5,7 @@ $(function(){
   var $firstname = $('#firstname');
   var $lastname = $('#lastname');
   var $email = $('#email');
+  var $phone = $('#phonenumber');
   var $search = $('#search');
 
   var handlers = {
@@ -33,8 +34,9 @@ $(function(){
       var firstname = $('<td>').text(contact.firstname);
       var lastname = $('<td>').text(contact.lastname);
       var email = $('<td>').text(contact.email);
-      var delbutton = $('<td>').html($('<button>').addClass('delete-button').text('Delete').attr('contactid', contact.id));
-      tr.append(firstname).append(lastname).append(email).append(delbutton);
+      var phone = $('<td>').text(contact.phone);
+      var delbutton = $('<td>').html($('<button>').addClass('delete-button btn btn-default').text('Delete').attr('contactid', contact.id));
+      tr.append(firstname).append(lastname).append(email).append(phone).append(delbutton);
       $contacts.prepend(tr);
       handlers.watchForDelete();
     },
@@ -58,7 +60,8 @@ $(function(){
       var contact = {
         firstname: $firstname.val(),
         lastname: $lastname.val(),
-        email: $email.val()
+        email: $email.val(),
+        phone: $phone.val()
       };
       e.preventDefault();
       $.ajax({
