@@ -38,6 +38,6 @@ delete '/contact/:id' do
 end
 
 if Contact.count == 0
-  Contact.create(firstname: "James", lastname: "Kanegae", email: "jameskanegae@gmail.com")
-  Contact.create(firstname: "Test", lastname: "Test", email: "Test@test.com")
+  Contact.create(firstname: "James", lastname: "Kanegae", email: "jameskanegae@gmail.com", phone: "1112223333")
+  Contact.create(firstname: "Test", lastname: "Test", email: "Test@test.com", phone: "9998887777")
 end
