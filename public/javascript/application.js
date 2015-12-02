@@ -1,10 +1,35 @@
 $(function() {
 
   var $contacts = $('.contacts-index');
-  var $message = $('#message')
+  var $message = $('#message');
   var $firstname = $('#firstname');
   var $lastname = $('#lastname');
   var $email = $('#email');
+  var $search = $('#search');
+
+  listAllContacts();
+
+  $('.list-nav-button').on('click', function(){
+    $(this).parent('ul').children('li').removeClass('active');
+    $(this).addClass('active');
+    listAllContacts();
+    $(".new-contact-form").addClass('display-none');
+    $(".search-contact-form").addClass('display-none');
+  });
+
+  $('.new-nav-button').on('click', function(){
+    $(this).parent('ul').children('li').removeClass('active');
+    $(this).addClass('active');
+    $(".new-contact-form").removeClass('display-none');
+    $(".search-contact-form").addClass('display-none');
+  });
+
+  $('.search-nav-button').on('click', function(){
+    $(this).parent('ul').children('li').removeClass('active');
+    $(this).addClass('active');
+    $(".new-contact-form").addClass('display-none');
+    $(".search-contact-form").removeClass('display-none');
+  });
 
   function addContact(contact) {
     var fullname = contact.firstname + " " + contact.lastname;
@@ -13,21 +38,24 @@ $(function() {
     $contacts.prepend(li);
   };
 
-  $.ajax({
-    type: 'GET',
-    url: '/contacts',
-    success: function(contacts) {
-      console.log(contacts);
-      $.each(contacts, function(i, contact) {
-        addContact(contact);
-      });
-    },
-    error: function() {
-      $message.text('Could not load contacts.');
-    }
-  });
+  function listAllContacts() {
+    $contacts.empty();
+    $.ajax({
+      type: 'GET',
+      url: '/contacts',
+      success: function(contacts) {
+        console.log(contacts);
+        $.each(contacts, function(i, contact) {
+          addContact(contact);
+        });
+      },
+      error: function() {
+        $message.text('Could not load contacts.');
+      }
+    });
+  };
 
-  $('#new-contact-submit').on('click', function() {
+  $('#new-contact-submit').on('click', function(e) {
 
     var contact = {
       firstname: $firstname.val(),
@@ -35,15 +63,42 @@ $(function() {
       email: $email.val()
     };
 
+    e.preventDefault();
+
     $.ajax({
       type: 'POST',
       url: '/contacts',
       data: contact,
       success: function(newContact) {
+        $('input').val('');
         addContact(newContact);
       },
       error: function() {
         $message.text('Error saving contact.');
+      }
+    });
+  });
+
+  $('#search-submit').on('click', function(e){
+
+    var search = {
+      search: $search.val()
+    };
+
+    e.preventDefault();
+
+    $contacts.empty();
+    $.ajax({
+      type: 'GET',
+      url: '/contacts',
+      data: search,
+      success: function(contacts) {
+        $.each(contacts, function(i, contact){
+          addContact(contact);
+        });
+      },
+      error: function() {
+        $message.text('Error with your search.');
       }
     });
   });

@@ -5,7 +5,12 @@ end
 
 get '/contacts' do
   content_type :json
-  Contact.all.to_json
+  if params[:search]
+    contacts = Contact.search(params)
+    contacts.to_json
+  else
+    contacts = Contact.all.to_json
+  end
 end
 
 post '/contacts' do
