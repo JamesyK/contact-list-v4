@@ -29,12 +29,13 @@ $(function(){
       $search.focus();
     },
     addContact: function(contact){
-      var fullname = contact.firstname + " " + contact.lastname;
-      var email = contact.email;
-      var li = $('<li>').text(fullname + " - " + email);
-      var delbutton = $('<button>').addClass('delete-button').text('Delete').attr('contactid', contact.id);
-      $contacts.prepend(li);
-      li.append(delbutton);
+      var tr = $('<tr>')
+      var firstname = $('<td>').text(contact.firstname);
+      var lastname = $('<td>').text(contact.lastname);
+      var email = $('<td>').text(contact.email);
+      var delbutton = $('<td>').html($('<button>').addClass('delete-button').text('Delete').attr('contactid', contact.id));
+      tr.append(firstname).append(lastname).append(email).append(delbutton);
+      $contacts.prepend(tr);
       handlers.watchForDelete();
     },
     listAllContacts: function(){
@@ -77,10 +78,10 @@ $(function(){
       $search.on('keyup', function(){
         var filter = $(this).val();
         if (filter) {
-          $contacts.find('li:not(:Contains(' + filter + '))').slideUp();
-          $contacts.find('li:Contains(' + filter + ')').slideDown();
+          $contacts.find('td:not(:Contains(' + filter + '))').closest('tr').hide();
+          $contacts.find('td:Contains(' + filter + ')').closest('tr').show();
         } else {
-          $contacts.find('li').slideDown();
+          $contacts.find('td').closest('tr').show();
         }
       });
     },
@@ -97,7 +98,7 @@ $(function(){
           type: 'DELETE',
           url: '/contact/' + contactid,
           success: function(result) {
-            thiscontact.closest('li').remove();
+            thiscontact.closest('tr').remove();
             $message.text('Contact deleted.');
 
           },
