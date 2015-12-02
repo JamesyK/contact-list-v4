@@ -1,6 +1,6 @@
 $(function(){
 
-  var $contacts = $('#contactsIndex');
+  var $contacts = $('#contacts-index');
   var $message = $('#message');
   var $firstname = $('#firstname');
   var $lastname = $('#lastname');
@@ -12,20 +12,20 @@ $(function(){
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
       handlers.listAllContacts();
-      $(".new-contact-form").addClass('display-none');
-      $("#searchContactForm").addClass('display-none');
+      $("#new-contact-div").addClass('display-none');
+      $("#search-contact-div").addClass('display-none');
     },
     newNavClick: function(){
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
-      $(".new-contact-form").removeClass('display-none');
-      $("#searchContactForm").addClass('display-none');
+      $("#new-contact-div").removeClass('display-none');
+      $("#search-contact-div").addClass('display-none');
     },
     searchNavClick: function(){
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
-      $(".new-contact-form").addClass('display-none');
-      $("#searchContactForm").removeClass('display-none');
+      $("#new-contact-div").addClass('display-none');
+      $("#search-contact-div").removeClass('display-none');
     },
     addContact: function(contact){
       var fullname = contact.firstname + " " + contact.lastname;
@@ -35,7 +35,6 @@ $(function(){
       $contacts.prepend(li);
       li.append(delbutton);
       handlers.watchForDelete();
-      searchFilter();
     },
     listAllContacts: function(){
       $contacts.empty();
@@ -70,26 +69,6 @@ $(function(){
         },
         error: function() {
           $message.text('Error saving contact.');
-        }
-      });
-    },
-    submitSearch: function(e){
-      var search = {
-        search: $search.val()
-      };
-      e.preventDefault();
-      $contacts.empty();
-      $.ajax({
-        type: 'GET',
-        url: '/contacts',
-        data: search,
-        success: function(contacts){
-          $.each(contacts, function(i, contact){
-            handlers.addContact(contact);
-          });
-        },
-        error: function(){
-          $message.text('Error with your search.');
         }
       });
     },
@@ -130,6 +109,8 @@ $(function(){
 
   handlers.listAllContacts();
 
+  searchFilter();
+
   function searchFilter(searchContactForm, contactsIndex){
 
     $search.on('change', function(){
@@ -148,7 +129,5 @@ $(function(){
   $.expr[':'].Contains = function(a,i,m){
     return (a.textContent || a.innerText || '').toUpperCase().indexOf(m[3].toUpperCase())>=0;
   };
-
-  searchFilter();
 
 });
