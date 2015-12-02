@@ -11,21 +11,22 @@ $(function(){
     listNavClick: function(){
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
-      handlers.listAllContacts();
-      $("#new-contact-div").addClass('display-none');
-      $("#search-contact-div").addClass('display-none');
+      $('#new-contact-div').addClass('display-none');
+      $('#search-contact-div').addClass('display-none');
     },
     newNavClick: function(){
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
-      $("#new-contact-div").removeClass('display-none');
-      $("#search-contact-div").addClass('display-none');
+      $('#new-contact-div').removeClass('display-none');
+      $('#search-contact-div').addClass('display-none');
+      $('#firstname').focus()
     },
     searchNavClick: function(){
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
-      $("#new-contact-div").addClass('display-none');
-      $("#search-contact-div").removeClass('display-none');
+      $('#new-contact-div').addClass('display-none');
+      $('#search-contact-div').removeClass('display-none');
+      $search.focus();
     },
     addContact: function(contact){
       var fullname = contact.firstname + " " + contact.lastname;
@@ -64,7 +65,7 @@ $(function(){
         url: '/contacts',
         data: contact,
         success: function(newContact){
-          $('input').val('');
+          $('#new-contact-form')[0].reset();
           handlers.addContact(newContact);
         },
         error: function() {
@@ -72,20 +73,33 @@ $(function(){
         }
       });
     },
+    searchFilter: function(){
+      $search.on('keyup', function(){
+        var filter = $(this).val();
+        if (filter) {
+          $contacts.find('li:not(:Contains(' + filter + '))').slideUp();
+          $contacts.find('li:Contains(' + filter + ')').slideDown();
+        } else {
+          $contacts.find('li').slideDown();
+        }
+      });
+    },
     watchForDelete: function(){
-      $('.delete-button').on('click', handlers.deleteContact);
+      $('.delete-button').unbind().on('click', handlers.deleteContact);
     },
     deleteContact: function(e){
+      console.log('fire delete')
+      e.preventDefault();
       if (confirm('Are you sure?')) {
         var thiscontact = $(this);
         var contactid = $(this).attr('contactid');
-        e.preventDefault
         $.ajax({
           type: 'DELETE',
           url: '/contact/' + contactid,
           success: function(result) {
             thiscontact.closest('li').remove();
             $message.text('Contact deleted.');
+
           },
           error: function() {
             $message.text('Error with deleting contact.');
@@ -105,26 +119,9 @@ $(function(){
 
   $('#new-contact-submit').on('click', handlers.submitContact);
 
-  $('#search-submit').on('click', handlers.submitSearch);
-
   handlers.listAllContacts();
 
-  searchFilter();
-
-  function searchFilter(searchContactForm, contactsIndex){
-
-    $search.on('change', function(){
-      var filter = $(this).val();
-      if (filter) {
-        $contacts.find('li:not(:Contains(' + filter + '))').slideUp();
-        $contacts.find('li:Contains(' + filter + ')').slideDown();
-      } else {
-        $contacts.find('li').slideDown();
-      }
-    }).keyup( function(){
-      $(this).change();
-    });
-  };
+  handlers.searchFilter();
 
   $.expr[':'].Contains = function(a,i,m){
     return (a.textContent || a.innerText || '').toUpperCase().indexOf(m[3].toUpperCase())>=0;
