@@ -1,16 +1,16 @@
 $(function() {
 
   var $contacts = $('.contacts-index');
-  var $errors = $('#errors')
+  var $message = $('#message')
   var $firstname = $('#firstname');
   var $lastname = $('#lastname');
   var $email = $('#email');
 
   function addContact(contact) {
-    var fullName = contact.firstname + " " + contact.lastname;
+    var fullname = contact.firstname + " " + contact.lastname;
     var email = contact.email;
-    var listContact = $('<li>').text(fullName + " - " + email);
-    $contacts.prepend(listContact);
+    var li = $('<li>').text(fullname + " - " + email);
+    $contacts.prepend(li);
   };
 
   $.ajax({
@@ -23,7 +23,7 @@ $(function() {
       });
     },
     error: function() {
-      $errors.text('Could not load contacts.');
+      $message.text('Could not load contacts.');
     }
   });
 
@@ -43,7 +43,7 @@ $(function() {
         addContact(newContact);
       },
       error: function() {
-        $errors.text('Error saving contact.');
+        $message.text('Error saving contact.');
       }
     });
   });

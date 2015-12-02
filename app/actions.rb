@@ -5,19 +5,26 @@ end
 
 get '/contacts' do
   content_type :json
-  @contacts = Contact.all
-
-  @contacts.to_json
+  Contact.all.to_json
 end
 
 post '/contacts' do
   content_type :json
-  @contact = Contact.new(params)
-
-  if @contact.save
-    @contct.to_json
+  contact = Contact.new(params)
+  if contact.save
+    contact.to_json
   else
     halt 500
+  end
+end
+
+post '/contacts/:id' do
+  content_type :json
+  contact = Contact.get(params[:id].to_i)
+  if contact
+    contact.to_json
+  else
+    halt 404
   end
 end
 
