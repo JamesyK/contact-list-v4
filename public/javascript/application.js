@@ -1,6 +1,6 @@
 $(function(){
 
-  var $contacts = $('.contacts-index');
+  var $contacts = $('#contactsIndex');
   var $message = $('#message');
   var $firstname = $('#firstname');
   var $lastname = $('#lastname');
@@ -13,19 +13,19 @@ $(function(){
       $(this).addClass('active');
       handlers.listAllContacts();
       $(".new-contact-form").addClass('display-none');
-      $(".search-contact-form").addClass('display-none');
+      $("#searchContactForm").addClass('display-none');
     },
     newNavClick: function(){
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
       $(".new-contact-form").removeClass('display-none');
-      $(".search-contact-form").addClass('display-none');
+      $("#searchContactForm").addClass('display-none');
     },
     searchNavClick: function(){
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
       $(".new-contact-form").addClass('display-none');
-      $(".search-contact-form").removeClass('display-none');
+      $("#searchContactForm").removeClass('display-none');
     },
     addContact: function(contact){
       var fullname = contact.firstname + " " + contact.lastname;
@@ -35,6 +35,7 @@ $(function(){
       $contacts.prepend(li);
       li.append(delbutton);
       handlers.watchForDelete();
+      searchFilter();
     },
     listAllContacts: function(){
       $contacts.empty();
@@ -128,5 +129,26 @@ $(function(){
   $('#search-submit').on('click', handlers.submitSearch);
 
   handlers.listAllContacts();
+
+  function searchFilter(searchContactForm, contactsIndex){
+
+    $search.on('change', function(){
+      var filter = $(this).val();
+      if (filter) {
+        $contacts.find('li:not(:Contains(' + filter + '))').slideUp();
+        $contacts.find('li:Contains(' + filter + ')').slideDown();
+      } else {
+        $contacts.find('li').slideDown();
+      }
+    }).keyup( function(){
+      $(this).change();
+    });
+  };
+
+  $.expr[':'].Contains = function(a,i,m){
+    return (a.textContent || a.innerText || '').toUpperCase().indexOf(m[3].toUpperCase())>=0;
+  };
+
+  searchFilter();
 
 });

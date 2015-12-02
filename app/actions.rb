@@ -5,7 +5,6 @@ end
 
 get '/contacts' do
   content_type :json
-  if params[:search]
     contacts = Contact.search(params)
     contacts.to_json
   else
