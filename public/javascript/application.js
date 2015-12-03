@@ -46,7 +46,6 @@ $(function(){
         type: 'GET',
         url: '/contacts',
         success: function(contacts){
-          console.log(contacts);
           $.each(contacts, function(i, contact) {
             handlers.addContact(contact);
           });
@@ -130,5 +129,53 @@ $(function(){
   $.expr[':'].Contains = function(a,i,m){
     return (a.textContent || a.innerText || '').toUpperCase().indexOf(m[3].toUpperCase())>=0;
   };
+
+  var soundCloud = {
+    getTracks: function(){
+      console.log("test");
+      var scSearch = $('#sc-search').val();
+      $.ajax({
+        type: 'GET',
+        url: 'http://api.soundcloud.com/tracks?client_id=36dea759c1db03493160f18f3527f9b8&limit=5&q=' + scSearch,
+        dataType: 'json',
+        success: function(results) {
+          $("#sc-table-div").removeClass('hidden');
+          $.each(results, function(i, result) {
+            soundCloud.listTracks(result);
+          });
+        },
+        error: function() {
+          console.log('getTracks error');
+        }
+      });
+    },
+    listTracks: function(result){
+      var tr = $('<tr>')
+      var title = $('<td>').text(result.title);
+      var embedButton = $('<td>').html($('<button>').addClass('embed-button btn btn-default').text('Embed').attr('resultid', result.permalink_url));
+      tr.append(title).append(embedButton);
+      $('#sc-results').prepend(tr);
+      soundCloud.watchForEmbed();
+    },
+    watchForEmbed: function(){
+      $('.embed-button').unbind().on('click', soundCloud.getEmbed);
+    },
+    getEmbed: function(e){
+      e.preventDefault();
+      var urlLink = $(this).attr('resultid');
+      $.ajax({
+        type: 'GET',
+        url: 'https://soundcloud.com/oembed?url=' + urlLink + '&format=json',
+        success: function(results){
+          $('#embed-player').append(results.html);
+        },
+        error: function(){
+          console.log('error embeding player');
+        }
+      });
+    }
+  };
+
+  $('#sc-search-button').on('click', soundCloud.getTracks);
 
 });
