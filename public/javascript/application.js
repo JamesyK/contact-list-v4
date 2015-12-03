@@ -9,20 +9,23 @@ $(function(){
   var $search = $('#search');
 
   var handlers = {
-    listNavClick: function(){
+    listNavClick: function(e){
+      e.preventDefault();
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
       $('#new-contact-div').addClass('display-none');
       $('#search-contact-div').addClass('display-none');
     },
-    newNavClick: function(){
+    newNavClick: function(e){
+      e.preventDefault();
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
       $('#new-contact-div').removeClass('display-none');
       $('#search-contact-div').addClass('display-none');
       $('#firstname').focus()
     },
-    searchNavClick: function(){
+    searchNavClick: function(e){
+      e.preventDefault();
       $(this).parent('ul').children('li').removeClass('active');
       $(this).addClass('active');
       $('#new-contact-div').addClass('display-none');
@@ -56,13 +59,13 @@ $(function(){
       }); 
     },
     submitContact: function(e){
+      e.preventDefault();
       var contact = {
         firstname: $firstname.val(),
         lastname: $lastname.val(),
         email: $email.val(),
         phone: $phone.val()
       };
-      e.preventDefault();
       $.ajax({
         type: 'POST',
         url: '/contacts',
@@ -91,7 +94,6 @@ $(function(){
       $('.delete-button').unbind().on('click', handlers.deleteContact);
     },
     deleteContact: function(e){
-      console.log('fire delete')
       e.preventDefault();
       if (confirm('Are you sure?')) {
         var thiscontact = $(this);
@@ -132,7 +134,6 @@ $(function(){
 
   var soundCloud = {
     getTracks: function(){
-      console.log("test");
       var scSearch = $('#sc-search').val();
       $.ajax({
         type: 'GET',
@@ -140,9 +141,11 @@ $(function(){
         dataType: 'json',
         success: function(results) {
           $("#sc-table-div").removeClass('hidden');
+          $("#sc-results").empty();
           $.each(results, function(i, result) {
             soundCloud.listTracks(result);
           });
+          $('#sc-search-form')[0].reset();
         },
         error: function() {
           console.log('getTracks error');
@@ -154,7 +157,7 @@ $(function(){
       var title = $('<td>').text(result.title);
       var embedButton = $('<td>').html($('<button>').addClass('embed-button btn btn-default').text('Embed').attr('resultid', result.permalink_url));
       tr.append(title).append(embedButton);
-      $('#sc-results').prepend(tr);
+      $('#sc-results').append(tr);
       soundCloud.watchForEmbed();
     },
     watchForEmbed: function(){
@@ -162,6 +165,7 @@ $(function(){
     },
     getEmbed: function(e){
       e.preventDefault();
+      $('#embed-player').empty();
       var urlLink = $(this).attr('resultid');
       $.ajax({
         type: 'GET',
