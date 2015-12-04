@@ -1,4 +1,43 @@
-<div class="row">
+<div class="row margin-top-20">  
+  <div class="col-md-4">
+
+    <div class="row">
+      <div id="sc-search-div" class="col-md-10 col-md-offset-1">
+        <form id="sc-search-form" action="#">
+          <div class="form-group">
+            <input id="sc-search" class="form-control" type="text" />
+          </div>
+          <div class="form-group">
+            <button id="sc-search-button" class="form-control">Search Sound Cloud</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="sc-table-div" class="hidden row">
+      <div class="col-md-10 col-md-offset-1 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="sc-results">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-md-8">
+    <div id="embed-player">
+    </div>
+  </div>
+</div>
+
+<div class="row margin-top-20">
   <div class="col-md-4">
 
     <ul class="nav nav-pills nav-justified">
@@ -7,44 +46,63 @@
       <li role="presentation" class="search-nav-button"><a href="#">Search</a></li>
     </ul>
 
-    <div class="new-contact-form display-none">
-      <h2 class="text-center">New Contact</h2>
-      <form id="new-contact">
-        <div class="form-group">
-          <label for="firstname">First name:</label>
-          <input id="firstname" class="form-control" name="firstname" type="text" />
-        </div>
-        <div class="form-group">
-          <label for="lastname">Last name:</label>
-          <input id="lastname" class="form-control" name="lastname" type="text" />
-        </div>
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input id="email" class="form-control" name="email" type="text" />
-        </div>
-        <div class="form-group">
-          <button id="new-contact-submit" class="form-control" type="submit">Submit</button>
-        </div>
-      </form>
+    <div id="new-contact-div" class="display-none row">
+      <div class="col-md-10 col-md-offset-1">
+        <form id="new-contact-form" action="#">
+          <h2 class="text-center">New Contact</h2>
+          <div class="form-group">
+            <label for="firstname">First name:</label>
+            <input id="firstname" class="form-control" name="firstname" type="text" />
+          </div>
+          <div class="form-group">
+            <label for="lastname">Last name:</label>
+            <input id="lastname" class="form-control" name="lastname" type="text" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input id="email" class="form-control" name="email" type="text" />
+          </div>
+          <div class="form-group">
+            <label for="phonenumber">Phone Number:</label>
+            <input id="phonenumber" class="form-control" name="phonenumber" type="text" />
+          </div>
+          <div class="form-group">
+            <button id="new-contact-submit" class="form-control">Submit</button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <div class="search-contact-form display-none">
-      <form id="search-contacts">
-        <h2 class="text-center">Search</h2>
-        <div class="form-group">
-          <input id="search" class="form-control" name="search" type="text" />
-        </div>
-        <div class="form-group">
-          <button id="search-submit" class="form-control" type="submit">Submit</button>
-        </div>
-      </form>
+    <div id="search-contact-div" class="display-none row">
+      <div class="col-md-10 col-md-offset-1">
+        <form id="search-contacts-form" action="#">
+          <h2 class="text-center">Search</h2>
+          <div class="form-group">
+            <input id="search" class="form-control" name="search" type="text" />
+          </div>
+        </form>
+      </div>
     </div>
 
   </div>
 
   <div class="col-md-8">
-    <p id="message"></p>
-    <h2>All Contacts</h2>
-    <ul class="contacts-index"></ul>
+    <h4 id="message" class="text-center"></h4>
+    <h2 class="text-center">All Contacts</h2>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="contacts-index">
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
