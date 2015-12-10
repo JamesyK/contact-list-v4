@@ -1,7 +1,7 @@
-Sinatra
+Contact List (In Development)
 =============
 
-Brought to you by Lighthouse Labs
+JavaScript single page app using sinatra framework and soundcloud API.
 
 ## Getting Started
 
